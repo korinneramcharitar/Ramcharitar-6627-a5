@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="534.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TaskManagerMenuController">
+   <children>
+      <TableView fx:id="TaskManagerTable" layoutX="-3.0" layoutY="36.0" prefHeight="375.0" prefWidth="637.0">
+        <columns>
+          <TableColumn fx:id="ValueColumn" prefWidth="183.0" text="Value" />
+          <TableColumn fx:id="SerialNumberColumn" minWidth="0.0" prefWidth="238.0" text="Serial Number" />
+            <TableColumn fx:id="NameColumn" prefWidth="208.0" text="Name" />
+        </columns>
+      </TableView>
+      <Button fx:id="DeleteItemButton" layoutX="404.0" layoutY="424.0" mnemonicParsing="false" onAction="#DeleteItemButtonCLicked" text="Delete Item" />
+      <Button fx:id="AddItemButton" layoutX="500.0" layoutY="424.0" mnemonicParsing="false" onAction="#AddItemButtonClicked" prefHeight="26.0" prefWidth="79.0" text="Add Item" />
+      <TextField fx:id="EnterValueTextField" layoutX="14.0" layoutY="424.0" prefHeight="26.0" prefWidth="115.0" promptText="Enter Value" />
+      <TextField fx:id="EnterSerialNumberTextField" layoutX="148.0" layoutY="424.0" prefHeight="26.0" prefWidth="115.0" promptText="Enter Serial Number" />
+      <TextField fx:id="EnterNameTextField" layoutX="275.0" layoutY="424.0" prefHeight="26.0" prefWidth="115.0" promptText="Enter Name" />
+      <MenuBar fx:id="MenuBar" layoutY="-1.0" prefHeight="37.0" prefWidth="634.0" style="-fx-border-color: #e0e0e0;">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Save" />
+                <MenuItem mnemonicParsing="false" text="Upload" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TextField fx:id="SearchTextField" alignment="CENTER" layoutX="212.0" layoutY="479.0" prefHeight="26.0" prefWidth="188.0" promptText="Search item here" />
+   </children>
+</AnchorPane>
