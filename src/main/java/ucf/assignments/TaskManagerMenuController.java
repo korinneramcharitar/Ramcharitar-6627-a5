@@ -1,3 +1,5 @@
+package ucf.assignments;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -42,7 +44,8 @@ public class TaskManagerMenuController implements Initializable {
     public javafx.scene.control.MenuBar MenuBar;
     @FXML
     public TextField SearchTextField;
-
+    @FXML
+    public Button SearchButton;
 
 
     public void initialize(URL location, ResourceBundle resources){
@@ -57,9 +60,12 @@ public class TaskManagerMenuController implements Initializable {
 //create list to hold data that will automatically be pushed into tableview when user first opens application
         ObservableList<Item> data = FXCollections.observableArrayList(
                 new Item(399.99, "AXB124AXY3", "Xbox One"),
-        new Item(599.99, "S40AZBDE47", "Samsung TV")
+                new Item(599.99, "S40AZBDE47", "Samsung TV")
         );
         TaskManagerTable.setItems(data);
+
+
+
         //create new list to sort through tableview
         FilteredList<Item> filteredData = new FilteredList<>(data, b-> true);
         SearchTextField.textProperty().addListener(((observable, oldValue, newValue) -> {
@@ -95,18 +101,22 @@ public class TaskManagerMenuController implements Initializable {
 
 
 //allow Table to be editable
-TaskManagerTable.setEditable(true);
+        TaskManagerTable.setEditable(true);
 //allow user to edit Value Column
-ValueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        ValueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
 //allow user to edit Serial Number Column
-SerialNumberColumn.setCellFactory((TextFieldTableCell.forTableColumn()));
-//Allow user to edit Namr Column
-NameColumn.setCellFactory((TextFieldTableCell.forTableColumn()));
+        SerialNumberColumn.setCellFactory((TextFieldTableCell.forTableColumn()));
+//Allow user to edit Name Column
+        NameColumn.setCellFactory((TextFieldTableCell.forTableColumn()));
 //allow user to select multiple columns
-TaskManagerTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        TaskManagerTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
     }
+
     public void DeleteItemButtonCLicked(ActionEvent actionEvent) {
+        DeleteItem();
+    }
+    public void DeleteItem(){
         //create list to allow app to select the row for deletion
         ObservableList<Item> selectedRows, allTasks;
         //set function to select item from table
@@ -121,14 +131,15 @@ TaskManagerTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     public void AddItemButtonClicked(ActionEvent actionEvent) {
+AddItem();
+    }
+    public void AddItem(){
         //create new Item to grab user input from textfields
 Item item = new Item(Double.parseDouble(EnterValueTextField.getText()),EnterNameTextField.getText(), EnterSerialNumberTextField.getText());
   //add the user input to tableview after pressing Add Button
    TaskManagerTable.getItems().add(item);
     }
 
-    public void SearchButtonClicked(ActionEvent actionEvent) {
-    }
 
 
 }
