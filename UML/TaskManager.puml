@@ -1,0 +1,20 @@
+@startuml
+class TaskManage{
+start()
+main()
+}
+class TaskmanagerMenuControlller{
+AddButtonClicked()
+DeleteButtonClicked()
+SaveButtonClicked()
+UploadButtonClicked()
+
+}
+class item{
+String itemID
+String itemName
+String itemValue
+}
+TaskManage -- TaskmanagerMenuControlller
+TaskmanagerMenuControlller -- item
+@enduml
