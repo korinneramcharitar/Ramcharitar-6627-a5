@@ -141,5 +141,6 @@ Item item = new Item(Double.parseDouble(EnterValueTextField.getText()),EnterName
     }
 
 
-
+    public void SearchButtonClicked(ActionEvent actionEvent) {
+    }
 }
