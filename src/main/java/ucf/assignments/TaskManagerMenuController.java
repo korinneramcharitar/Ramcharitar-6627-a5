@@ -16,12 +16,20 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class TaskManagerMenuController implements Initializable {
@@ -117,6 +125,12 @@ public class TaskManagerMenuController implements Initializable {
         //create new Item to grab user input from textfields
      Item item = addItems(itemValue, itemID, itemName);
 
+        TableColumn<Item, String> column =NameColumn; // column you want
+
+        List<String> columnData = new ArrayList<>();
+        for (Item items : TaskManagerTable.getItems()) {
+            columnData.add(NameColumn.getCellObservableValue(items).getValue());
+        }
 
     TaskManagerTable.getItems().add(item);
 
@@ -259,16 +273,71 @@ public class TaskManagerMenuController implements Initializable {
         File file = fc.showOpenDialog(stage);
         if (file != null) {
 
-                String path = file.getPath();
-                Document doc = Jsoup.parseBodyFragment(path);
-            Element element = doc.select("td").get(3);
+            String path = file.getPath();
+            String content = "";
+            try {
+                BufferedReader in = new BufferedReader(new FileReader(path));
+                String str;
+                while ((str = in.readLine()) != null) {
+                    content += str;
+                }
+                in.close();
+            } catch (IOException e) {
+            }
+            FileWriter writer = new FileWriter("/Users/korinneramcharitar/Desktop/html.txt");
+            Document doc = Jsoup.parseBodyFragment(content);
 
+            Elements rows = doc.getElementsByTag("tr");
+
+            for (Element row : rows) {
+                Elements cells = row.getElementsByTag("td");
+                for (Element cell : cells) {
+                    writer.write(cell.text().concat("\t"));
+                }
+                writer.write("\n");
+
+
+            }
+
+            writer.close();
 
         }
     }
+    public  void JSONFileUploadClicked(ActionEvent actionEvent) throws IOException, ParseException {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Open file");
+        Stage stage = (Stage) anchorpane.getScene().getWindow();
 
-    public void JSONFileUploadClicked(ActionEvent actionEvent) {
+        File file = fc.showOpenDialog(stage);
+        if (file != null) {
+
+            String path = file.getPath();
+            JSONParser parser = new JSONParser();
+
+                Object obj = parser.parse(new FileReader(path));
+
+            JSONObject jsonObject = (JSONObject) obj;
+
+            JSONArray inventoryList = (JSONArray) jsonObject.get("Inventory List");
+
+            Iterator<JSONObject> iterator = inventoryList.iterator();
+            while(iterator.hasNext()){
+
+            }
 
 
+            }
+        }
+
+
+
+    public void NameValuesButtonClicked(ActionEvent actionEvent) {
+        TableColumn<Item, String> column =NameColumn; // column you want
+
+        List<String> columnData = new ArrayList<>();
+        for (Item item : TaskManagerTable.getItems()) {
+           String me = String.valueOf(columnData.add(NameColumn.getCellObservableValue(item).getValue()));
+            System.out.println(me);
+        }
     }
 }
