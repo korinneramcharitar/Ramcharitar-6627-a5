@@ -4,10 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
@@ -17,11 +19,9 @@ import javafx.util.converter.DoubleStringConverter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class TaskManagerMenuController implements Initializable {
@@ -71,41 +71,9 @@ public class TaskManagerMenuController implements Initializable {
 
 
         //create new list to sort through tableview
-      /* FilteredList<Item> filteredData = new FilteredList<>(data, b-> true);
-        SearchTextField.textProperty().addListener(((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(item -> {
 
 
-                //if the textfield is empty keep display of tableview
-                if(newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                //compare first name and last name of every person with textfield.
-                String lowerCaseFilter = newValue.toLowerCase();
-                if (item.getItemName().toLowerCase().indexOf(lowerCaseFilter) != -1){
-                    return true;
-                } else if (item.getItemID().toLowerCase().indexOf(lowerCaseFilter) != -1){
-                    return true;
 
-
-                } else if(String.valueOf(item.getItemValue()).indexOf(lowerCaseFilter) != -1)
-                    return true;
-                else
-                    //if nothing comes up show nothing
-                    return false;
-            });
-        }));
-
-        //put new list in a sorted list
-        SortedList<Item> sortedData = new SortedList<>(filteredData);
-
-        //bind sorted list to tableview
-        sortedData.comparatorProperty().bind(TaskManagerTable.comparatorProperty());
-
-        //add the filtered list to table
-        TaskManagerTable.setItems(sortedData);
-
-       */
 
 
 //allow Table to be editable
@@ -140,20 +108,27 @@ public class TaskManagerMenuController implements Initializable {
     }
 
     public void AddItemButtonClicked(ActionEvent actionEvent) {
+
+
         String itemName = EnterNameTextField.getText();
         String itemID = EnterSerialNumberTextField.getText();
-        Double itemValue = Double.parseDouble(EnterValueTextField.getText());
+        double itemValue = Double.parseDouble(EnterValueTextField.getText());
+
         //create new Item to grab user input from textfields
-        Item item = addItems(itemValue, itemID, itemName);
+     Item item = addItems(itemValue, itemID, itemName);
 
 
-        //add the user input to tableview
-        //for loop to stop repeated valuenames and serial numbers?
-        TaskManagerTable.getItems().add(item);
+    TaskManagerTable.getItems().add(item);
 
     }
 
+
+
+
+
+
     public Item addItems(double itemValue, String itemID, String itemName) {
+
 
         return new Item(itemValue, itemID, itemName);
 
@@ -161,17 +136,17 @@ public class TaskManagerMenuController implements Initializable {
 
 
     public void SearchButtonClicked(ActionEvent actionEvent) throws IOException {
-       /* FXMLLoader loader = new FXMLLoader(getClass().getResource("SearchItems.fxml"));
-        Parent root = loader.load();
-        SearchItemsController SearchItemScene = loader.getController();
-        SearchItemScene.showInformation(ValueColumn.getText(),SerialNumberColumn.getText(),NameColumn.getText());
-                //String.valueOf(EnterValueTextField.getText()), EnterSerialNumberTextField.getText(), EnterNameTextField.getText());
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Task Manager");
-        stage.show();
 
-        */
+        try {
+            Parent SearchItems = FXMLLoader.load(getClass().getResource("SearchItems.fxml"));
+            Scene SearchItemScene = new Scene(SearchItems);
+            Stage window = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+            window.setScene(SearchItemScene);
+            window.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -232,12 +207,25 @@ public class TaskManagerMenuController implements Initializable {
 
     }
 
-    public void SaveListasJSON(ActionEvent actionEvent) {
+    public void SaveListasJSON(ActionEvent actionEvent) throws IOException {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Save file");
+        Stage stage = (Stage) anchorpane.getScene().getWindow();
 
+        File file = fc.showSaveDialog(stage);
+        if (file != null) {
+            String path = file.getPath();
+            FileWriter myWriter = new FileWriter(path);
+
+            for (Item item : TaskManagerTable.getItems()) {
+                String formatted = String.format("{\"Items\":{\"SerialNumber\":\"%s\",\"Value\":%s,\"Name\":\"%s\"}}", item.getItemID(), item.getItemValue(), item.getItemName());
+                myWriter.write(formatted);
+                System.out.println(formatted);
+            }
+            myWriter.close();
+        }
 
     }
-
-
     public void TSVFileUploadClicked(ActionEvent actionEvent) throws IOException {
         FileChooser fc = new FileChooser();
         fc.setTitle("Open file");

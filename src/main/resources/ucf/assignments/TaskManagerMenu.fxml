@@ -41,6 +41,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <Button fx:id="SearchButton" layoutX="276.0" layoutY="474.0" mnemonicParsing="false" onAction="#SearchButtonClicked" text="Search Item" />
+      <Button fx:id="SearchButton" layoutX="483.0" layoutY="464.0" mnemonicParsing="false" onAction="#SearchButtonClicked" text="Search Item" />
+      <TextField fx:id="SearchTextField" layoutX="98.0" layoutY="477.0" prefHeight="26.0" prefWidth="347.0" promptText="Enter Item here" />
    </children>
 </AnchorPane>
