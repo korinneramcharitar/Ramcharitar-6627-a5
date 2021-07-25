@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="459.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.SearchItemsController">
+   <children>
+      <TableView fx:id="TaskManagerTableView" layoutY="66.0" prefHeight="371.0" prefWidth="600.0">
+        <columns>
+          <TableColumn fx:id="ValueColumn" prefWidth="193.0" text="Value" />
+          <TableColumn fx:id="SerialNumberColumn" prefWidth="227.0" text="Serial Number" />
+            <TableColumn fx:id="ItemNameColumn" prefWidth="179.0" text="Name" />
+        </columns>
+      </TableView>
+      <TextField fx:id="SearchBarTextField" layoutX="143.0" layoutY="26.0" prefHeight="26.0" prefWidth="335.0" promptText="Enter Item Here" />
+   </children>
+</AnchorPane>

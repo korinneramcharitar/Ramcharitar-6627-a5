@@ -4,8 +4,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 
 import javafx.beans.property.SimpleStringProperty;
 
-import java.math.BigDecimal;
-
 public class Item
 {
     private final SimpleDoubleProperty itemValue;
@@ -20,6 +18,8 @@ public Item(Double itemValue, String itemID, String itemName){
     this.itemName  = new SimpleStringProperty(itemName);
 
 }
+
+
 
     public String getItemName() {
         return itemName.get();

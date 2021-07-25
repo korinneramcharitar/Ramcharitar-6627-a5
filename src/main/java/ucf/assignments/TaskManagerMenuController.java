@@ -2,34 +2,37 @@ package ucf.assignments;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
-import javafx.css.converter.StringConverter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.Callback;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
-import ucf.assignments.Item;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-import java.awt.geom.Line2D;
+import java.io.*;
 import java.net.URL;
-import java.text.NumberFormat;
-import java.util.Locale;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class TaskManagerMenuController implements Initializable {
     @FXML
     public TableView<Item> TaskManagerTable;
     @FXML
-    public TableColumn<Item,Double> ValueColumn;
+    public TableColumn<Item, Double> ValueColumn;
     @FXML
-    public TableColumn<Item,String> SerialNumberColumn;
+    public TableColumn<Item, String> SerialNumberColumn;
     @FXML
-    public TableColumn<Item,String> NameColumn;
+    public TableColumn<Item, String> NameColumn;
     @FXML
     public Button DeleteItemButton;
     @FXML
@@ -46,9 +49,11 @@ public class TaskManagerMenuController implements Initializable {
     public TextField SearchTextField;
     @FXML
     public Button SearchButton;
+    @FXML
+    public AnchorPane anchorpane;
 
 
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
         //set Value Column values
         ValueColumn.setCellValueFactory(new PropertyValueFactory<Item, Double>("ItemValue"));
         //set Number Column values
@@ -65,11 +70,11 @@ public class TaskManagerMenuController implements Initializable {
         TaskManagerTable.setItems(data);
 
 
-
         //create new list to sort through tableview
-        FilteredList<Item> filteredData = new FilteredList<>(data, b-> true);
+      /* FilteredList<Item> filteredData = new FilteredList<>(data, b-> true);
         SearchTextField.textProperty().addListener(((observable, oldValue, newValue) -> {
             filteredData.setPredicate(item -> {
+
 
                 //if the textfield is empty keep display of tableview
                 if(newValue == null || newValue.isEmpty()) {
@@ -81,6 +86,7 @@ public class TaskManagerMenuController implements Initializable {
                     return true;
                 } else if (item.getItemID().toLowerCase().indexOf(lowerCaseFilter) != -1){
                     return true;
+
 
                 } else if(String.valueOf(item.getItemValue()).indexOf(lowerCaseFilter) != -1)
                     return true;
@@ -99,6 +105,8 @@ public class TaskManagerMenuController implements Initializable {
         //add the filtered list to table
         TaskManagerTable.setItems(sortedData);
 
+       */
+
 
 //allow Table to be editable
         TaskManagerTable.setEditable(true);
@@ -116,7 +124,8 @@ public class TaskManagerMenuController implements Initializable {
     public void DeleteItemButtonCLicked(ActionEvent actionEvent) {
         DeleteItem();
     }
-    public void DeleteItem(){
+
+    public void DeleteItem() {
         //create list to allow app to select the row for deletion
         ObservableList<Item> selectedRows, allTasks;
         //set function to select item from table
@@ -124,23 +133,154 @@ public class TaskManagerMenuController implements Initializable {
 //set function to get specific items
         selectedRows = TaskManagerTable.getSelectionModel().getSelectedItems();
         //create loop to remove item row selected
-        for(Item item : selectedRows){
+        for (Item item : selectedRows) {
             allTasks.remove(item);
         }
 
     }
 
     public void AddItemButtonClicked(ActionEvent actionEvent) {
-AddItem();
-    }
-    public void AddItem(){
+        String itemName = EnterNameTextField.getText();
+        String itemID = EnterSerialNumberTextField.getText();
+        Double itemValue = Double.parseDouble(EnterValueTextField.getText());
         //create new Item to grab user input from textfields
-Item item = new Item(Double.parseDouble(EnterValueTextField.getText()),EnterNameTextField.getText(), EnterSerialNumberTextField.getText());
-  //add the user input to tableview after pressing Add Button
-   TaskManagerTable.getItems().add(item);
+        Item item = addItems(itemValue, itemID, itemName);
+
+
+        //add the user input to tableview
+        //for loop to stop repeated valuenames and serial numbers?
+        TaskManagerTable.getItems().add(item);
+
+    }
+
+    public Item addItems(double itemValue, String itemID, String itemName) {
+
+        return new Item(itemValue, itemID, itemName);
+
     }
 
 
-    public void SearchButtonClicked(ActionEvent actionEvent) {
+    public void SearchButtonClicked(ActionEvent actionEvent) throws IOException {
+       /* FXMLLoader loader = new FXMLLoader(getClass().getResource("SearchItems.fxml"));
+        Parent root = loader.load();
+        SearchItemsController SearchItemScene = loader.getController();
+        SearchItemScene.showInformation(ValueColumn.getText(),SerialNumberColumn.getText(),NameColumn.getText());
+                //String.valueOf(EnterValueTextField.getText()), EnterSerialNumberTextField.getText(), EnterNameTextField.getText());
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Task Manager");
+        stage.show();
+
+        */
+
+    }
+
+    public void SaveListClicked(ActionEvent actionEvent) throws IOException {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Save file");
+        Stage stage = (Stage) anchorpane.getScene().getWindow();
+
+       File file = fc.showSaveDialog(stage);
+    if(file != null){
+        String path = file.getPath();
+        FileWriter myWriter = new FileWriter(path);
+
+
+            for (Item item : TaskManagerTable.getItems()) {
+
+                String formatted = String.format("%s\t %s\t %s\n", item.getItemValue(), item.getItemID(), item.getItemName());
+                myWriter.write(formatted);
+                System.out.println(formatted);
+            }
+        myWriter.close();
+        }
+
+    }
+
+
+
+    public void SaveListasHtml(ActionEvent actionEvent) throws IOException {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Save file");
+        Stage stage = (Stage) anchorpane.getScene().getWindow();
+
+        File file = fc.showSaveDialog(stage);
+        if(file != null){
+            String path = file.getPath();
+            FileWriter myWriter = new FileWriter(path);
+
+            myWriter.write("<table style=\"width:100%\">" +
+                    "  <tr>" +
+                    "    <th>Value</th>" +
+                    "    <th>Serial Number</th>" +
+                    "    <th>Name</th>" +
+                    "  </tr>");
+
+            for (Item item : TaskManagerTable.getItems()) {
+
+                String formatted = String.format(
+                        "    <td>%s</td>" +
+                        "    <td> %s</td>" +
+                        "    <td> %s</td>" +
+                        "  </tr>" +
+                        "  <tr>", item.getItemValue(), item.getItemID(), item.getItemName());
+                myWriter.write(formatted);
+                System.out.println(formatted);
+            }
+            myWriter.close();
+        }
+
+    }
+
+    public void SaveListasJSON(ActionEvent actionEvent) {
+
+
+    }
+
+
+    public void TSVFileUploadClicked(ActionEvent actionEvent) throws IOException {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Open file");
+        Stage stage = (Stage) anchorpane.getScene().getWindow();
+
+        File file = fc.showOpenDialog(stage);
+
+        if (file != null) {
+            String path = file.getPath();
+            BufferedReader br = new BufferedReader(new FileReader(path));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split("\t");
+                Double doubles = Double.parseDouble(values[0]);
+                final ObservableList<Item> data = FXCollections.observableArrayList(
+                        new Item(doubles, values[1], values[2]));
+                TaskManagerTable.getItems().addAll(data);
+
+
+            }
+
+
+        }
+    }
+
+    public void HTMLFileUploadClicked(ActionEvent actionEvent) throws IOException {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Open file");
+        Stage stage = (Stage) anchorpane.getScene().getWindow();
+
+        File file = fc.showOpenDialog(stage);
+        if (file != null) {
+
+                String path = file.getPath();
+                Document doc = Jsoup.parseBodyFragment(path);
+            Element element = doc.select("td").get(3);
+
+
+        }
+    }
+
+    public void JSONFileUploadClicked(ActionEvent actionEvent) {
+
+
     }
 }

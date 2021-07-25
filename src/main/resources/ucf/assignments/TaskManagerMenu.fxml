@@ -9,7 +9,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="534.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.TaskManagerMenuController">
+<AnchorPane fx:id="anchorpane" prefHeight="534.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.TaskManagerMenuController">
    <children>
       <TableView fx:id="TaskManagerTable" layoutX="-3.0" layoutY="36.0" prefHeight="375.0" prefWidth="637.0">
         <columns>
@@ -25,20 +25,22 @@
       <TextField fx:id="EnterNameTextField" layoutX="275.0" layoutY="424.0" prefHeight="26.0" prefWidth="115.0" promptText="Enter Name" />
       <MenuBar fx:id="MenuBar" layoutY="-1.0" prefHeight="37.0" prefWidth="634.0" style="-fx-border-color: #e0e0e0;">
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu mnemonicParsing="false" text="File Save">
             <items>
-              <MenuItem mnemonicParsing="false" text="Save" />
-                <MenuItem mnemonicParsing="false" text="Upload" />
+              <MenuItem mnemonicParsing="false" onAction="#SaveListClicked" text="Save as TSV" />
+                  <MenuItem mnemonicParsing="false" onAction="#SaveListasHtml" text="Save as Html" />
+                  <MenuItem mnemonicParsing="false" onAction="#SaveListasJSON" text="Save as Json" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
+          <Menu mnemonicParsing="false" text="File Upload">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+                <MenuItem mnemonicParsing="false" onAction="#TSVFileUploadClicked" text="Tsv File" />
+              <MenuItem mnemonicParsing="false" onAction="#HTMLFileUploadClicked" text="Html File" />
+                  <MenuItem mnemonicParsing="false" onAction="#JSONFileUploadClicked" text="Json File" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <TextField fx:id="SearchTextField" alignment="CENTER" layoutX="212.0" layoutY="479.0" prefHeight="26.0" prefWidth="188.0" promptText="Search item here" />
-      <Button fx:id="SearchButton" layoutX="444.0" layoutY="479.0" mnemonicParsing="false" onAction="#SearchButtonClicked" text="Search" />
+      <Button fx:id="SearchButton" layoutX="276.0" layoutY="474.0" mnemonicParsing="false" onAction="#SearchButtonClicked" text="Search Item" />
    </children>
 </AnchorPane>
