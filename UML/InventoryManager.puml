@@ -1,0 +1,32 @@
+@startuml
+class InventoryManage{
+start()
+main()
+}
+class InventorymanagerMenuControlller{
+initialize()
+AddButtonClicked()
+DeleteButtonClicked()
+SaveButtonClicked()
+UploadButtonClicked()
+
+}
+class SearchItemsController{
+initialize()
+
+
+}
+class itemModel{
+String itemID
+String itemName
+String itemValue
+}
+class InventoryManagerMenu.fxml.fxml
+class SearchItems.fxml
+InventoryManage -- InventorymanagerMenuControlller
+InventorymanagerMenuControlller -- itemModel
+InventorymanagerMenuControlller -- SearchItemsController
+SearchItemsController -- itemModel
+SearchItems.fxml -- SearchItemsController
+InventoryManagerMenu.fxml -- InventorymanagerMenuControlller
+@enduml

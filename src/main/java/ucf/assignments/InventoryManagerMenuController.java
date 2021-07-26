@@ -48,8 +48,6 @@ public class InventoryManagerMenuController implements Initializable {
     @FXML
     public javafx.scene.control.MenuBar MenuBar;
     @FXML
-    public TextField SearchTextField;
-    @FXML
     public Button SearchButton;
     @FXML
     public AnchorPane anchorpane;
@@ -131,6 +129,7 @@ public class InventoryManagerMenuController implements Initializable {
             alert.showAndWait();
 
         }
+
 
     }
 
