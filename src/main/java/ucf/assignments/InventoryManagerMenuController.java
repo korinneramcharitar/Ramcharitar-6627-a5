@@ -236,7 +236,8 @@ public class InventoryManagerMenuController implements Initializable {
             //loop through each inventory column
             for (Item item : TaskManagerTable.getItems()) {
                 //format the Table data as a JSON file
-                String formatted = String.format("{\"Items\":{\"SerialNumber\":\"%s\",\"Value\":%s,\"Name\":\"%s\"}}", item.getItemID(), item.getItemValue(), item.getItemName());
+                String formatted = String.format("{\"Items\":{\"SerialNumber\":\"%s\",\"Value\":%s,\"Name\":\"%s\"}}",
+                        item.getItemID(), item.getItemValue(), item.getItemName());
                 //write to the file
                 myWriter.write(formatted);
                 //print out the file to console
