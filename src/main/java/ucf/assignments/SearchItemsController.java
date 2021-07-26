@@ -48,6 +48,9 @@ private ObservableList<Item> selectedItems;
 
 
 //create list to hold data that will automatically be pushed into tableview when user first opens application
+       //This is where if a user wanted to create a list they can search through,
+       //They would hard code here in the form "ItemValue, ItemID, itemName"
+       //For example 20.00, "WER57FYGY7", "Mario Kart"
        ObservableList<Item> data = FXCollections.observableArrayList(
                new Item(399.99, "AXB124AXY3", "Xbox One"),
                new Item(599.99, "S40AZBDE47", "Samsung TV")
