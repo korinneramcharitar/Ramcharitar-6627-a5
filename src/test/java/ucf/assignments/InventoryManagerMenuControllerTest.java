@@ -5,7 +5,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.junit.jupiter.api.Test;
 
-class TaskManagerMenuControllerTest {
+class InventoryManagerMenuControllerTest {
 
     @FXML
     public TableView<Item> TaskManagerTable;

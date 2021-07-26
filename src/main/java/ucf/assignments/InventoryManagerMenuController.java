@@ -16,9 +16,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -27,12 +24,9 @@ import org.jsoup.select.Elements;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class TaskManagerMenuController implements Initializable {
+public class InventoryManagerMenuController implements Initializable {
     @FXML
     public TableView<Item> TaskManagerTable;
     @FXML
@@ -85,8 +79,6 @@ public class TaskManagerMenuController implements Initializable {
         //create new list to sort through tableview
 
 
-
-
 //allow Table to be editable
         TaskManagerTable.setEditable(true);
 //allow user to edit Value Column
@@ -126,31 +118,26 @@ public class TaskManagerMenuController implements Initializable {
         String itemID = EnterSerialNumberTextField.getText();
         double itemValue = Double.parseDouble(EnterValueTextField.getText());
 
-            //create new Item to grab user input from textfields
-            Item item = addItems(itemValue, itemID, itemName);
+        //create new Item to grab user input from textfields
+        Item item = addItems(itemValue, itemID, itemName);
 
 
-            //add textfield input to table
+        //add textfield input to table
         //show alert box if itemID is already in tableview
-            if (!TaskManagerTable.getItems().contains(itemID)) {
+        if (!TaskManagerTable.getItems().contains(itemID)) {
             TaskManagerTable.getItems().add(item);
-            }
-            else{
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.showAndWait();
 
-            }
+        }
 
     }
 
 
-
-
-
-
     public Item addItems(double itemValue, String itemID, String itemName) {
 
-            //create a template for new Item
+        //create a template for new Item
         return new Item(itemValue, itemID, itemName);
 
     }
@@ -162,7 +149,7 @@ public class TaskManagerMenuController implements Initializable {
         try {
             Parent SearchItems = FXMLLoader.load(getClass().getResource("SearchItems.fxml"));
             Scene SearchItemScene = new Scene(SearchItems);
-            Stage window = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+            Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             window.setScene(SearchItemScene);
             window.show();
 
@@ -178,15 +165,15 @@ public class TaskManagerMenuController implements Initializable {
         fc.setTitle("Save file");
         Stage stage = (Stage) anchorpane.getScene().getWindow();
 
-       File file = fc.showSaveDialog(stage);
-    if(file != null){
-        //turn user input path into string
-        String path = file.getPath();
-        FileWriter myWriter = new FileWriter(path);
+        File file = fc.showSaveDialog(stage);
+        if (file != null) {
+            //turn user input path into string
+            String path = file.getPath();
+            FileWriter myWriter = new FileWriter(path);
 
             //loop through table data
             for (Item item : TaskManagerTable.getItems()) {
-                    //seperate data into tsv form
+                //seperate data into tsv form
                 String formatted = String.format("%s\t %s\t %s\n", item.getItemValue(), item.getItemID(), item.getItemName());
                 //write to file
                 myWriter.write(formatted);
@@ -194,11 +181,10 @@ public class TaskManagerMenuController implements Initializable {
                 System.out.println(formatted);
             }
             //close file
-        myWriter.close();
+            myWriter.close();
         }
 
     }
-
 
 
     public void SaveListasHtml(ActionEvent actionEvent) throws IOException {
@@ -207,11 +193,11 @@ public class TaskManagerMenuController implements Initializable {
         Stage stage = (Stage) anchorpane.getScene().getWindow();
 
         File file = fc.showSaveDialog(stage);
-        if(file != null){
+        if (file != null) {
             //tuyrn path from fileChooser to String
             String path = file.getPath();
             FileWriter myWriter = new FileWriter(path);
-                //include header information for Table data
+            //include header information for Table data
             myWriter.write("<table style=\"width:100%\">" +
                     "  <tr>" +
                     "    <th>Value</th>" +
@@ -220,13 +206,13 @@ public class TaskManagerMenuController implements Initializable {
                     "  </tr>");
 
             for (Item item : TaskManagerTable.getItems()) {
-                    //set table data in html table format
+                //set table data in html table format
                 String formatted = String.format(
                         "    <td>%s</td>" +
-                        "    <td> %s</td>" +
-                        "    <td> %s</td>" +
-                        "  </tr>" +
-                        "  <tr>", item.getItemValue(), item.getItemID(), item.getItemName());
+                                "    <td> %s</td>" +
+                                "    <td> %s</td>" +
+                                "  </tr>" +
+                                "  <tr>", item.getItemValue(), item.getItemID(), item.getItemName());
                 //write to file
                 myWriter.write(formatted);
 
@@ -262,6 +248,7 @@ public class TaskManagerMenuController implements Initializable {
         }
 
     }
+
     public void TSVFileUploadClicked(ActionEvent actionEvent) throws IOException {
         FileChooser fc = new FileChooser();
         fc.setTitle("Open file");
@@ -278,22 +265,21 @@ public class TaskManagerMenuController implements Initializable {
             //go through each line of file
             while ((line = br.readLine()) != null) {
 
-                     //grab each value that is tabbed
-                    String[] values = line.split("\t");
-                    //set double value for Observable List
-                    Double doubles = Double.parseDouble(values[0]);
-                    //create list instance to put in table with objects from file
-                    final ObservableList<Item> data = FXCollections.observableArrayList(
-                            new Item(doubles, values[1], values[2]));
-                    //add Inventory Items to list as formatted
-                    TaskManagerTable.getItems().addAll(data);
-
-
+                //grab each value that is tabbed
+                String[] values = line.split("\t");
+                //set double value for Observable List
+                Double doubles = Double.parseDouble(values[0]);
+                //create list instance to put in table with objects from file
+                final ObservableList<Item> data = FXCollections.observableArrayList(
+                        new Item(doubles, values[1], values[2]));
+                //add Inventory Items to list as formatted
+                TaskManagerTable.getItems().addAll(data);
 
 
             }
         }
     }
+
     public void HTMLFileUploadClicked(ActionEvent actionEvent) throws IOException {
         FileChooser fc = new FileChooser();
         fc.setTitle("Open file");
@@ -329,14 +315,14 @@ public class TaskManagerMenuController implements Initializable {
                 writer.write("\n");
 
 
-
             }
 
             writer.close();
 
         }
     }
-    public  void JSONFileUploadClicked(ActionEvent actionEvent) throws IOException, ParseException {
+
+    public void JSONFileUploadClicked(ActionEvent actionEvent) throws IOException, ParseException {
 
         FileChooser fc = new FileChooser();
         fc.setTitle("Open file");
@@ -346,33 +332,22 @@ public class TaskManagerMenuController implements Initializable {
         if (file != null) {
 
             String path = file.getPath();
+           /* JSONParser parser = new JSONParser();
 
-            JSONParser parser = new JSONParser();
-
-                Object obj = parser.parse(new FileReader(path));
+            Object obj = parser.parse(new FileReader(path));
 
             JSONObject jsonObject = (JSONObject) obj;
 
             JSONArray inventoryList = (JSONArray) jsonObject.get("Inventory List");
 
             Iterator<JSONObject> iterator = inventoryList.iterator();
-            while(iterator.hasNext()){
+            while (iterator.hasNext()) {
 
             }
+*/
 
-
-            }
-        }
-
-
-
-    public void NameValuesButtonClicked(ActionEvent actionEvent) {
-        TableColumn<Item, String> column =NameColumn; // column you want
-
-        List<String> columnData = new ArrayList<>();
-        for (Item item : TaskManagerTable.getItems()) {
-           String me = String.valueOf(columnData.add(NameColumn.getCellObservableValue(item).getValue()));
-            System.out.println(me);
         }
     }
 }
+
+

@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class TaskManage extends Application {
+public class InventoryManage extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -17,7 +17,7 @@ public class TaskManage extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("TaskManagerMenu.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("InventoryManagerMenu.fxml"));
 
             Scene scene = new Scene(root);
 
