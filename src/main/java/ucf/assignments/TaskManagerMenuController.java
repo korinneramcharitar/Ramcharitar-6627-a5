@@ -59,6 +59,10 @@ public class TaskManagerMenuController implements Initializable {
     public Button SearchButton;
     @FXML
     public AnchorPane anchorpane;
+    /*
+     *  UCF COP3330 Summer 2021 Assignment 5 Solution
+     *  Copyright 2021 Korinne Ramcharitar
+     */
 
 
     public void initialize(URL location, ResourceBundle resources) {

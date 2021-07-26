@@ -16,6 +16,10 @@ import javafx.util.converter.DoubleStringConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+/*
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
+ *  Copyright 2021 Korinne Ramcharitar
+ */
 
 public class SearchItemsController implements Initializable {
 private ObservableList<Item> selectedItems;
